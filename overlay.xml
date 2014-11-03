@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "repositories.dtd">
+<repositories xmlns="" version="1.0">
+  <repo quality="experimental" status="unofficial">
+    <name>clang-kernel</name>
+    <description>Overlay for Gentoo Clang Kernel Development</description>
+    <homepage>https://github.com/fsvm88/gentoo-clang-kernel-overlay</homepage>
+    <owner type="project">
+      <email>fsvm88@gmail.com</email>
+      <name>Fabio Scaccabarozzi</name>
+    </owner>
+    <source type="git">git://github.com/fsvm88/gentoo-clang-kernel-overlay.git</source>
+    <feed>https://github.com/fsvm88/gentoo-clang-kernel-overlay/commits/master.atom</feed>
+  </repo>
+</repositories>
