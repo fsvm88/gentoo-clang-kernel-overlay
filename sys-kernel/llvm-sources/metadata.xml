@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>fsvm88@gmail.com</email>
+		<name>Fabio Scaccabarozzi</name>
+	</maintainer>
+	<use>
+		<flag name="broken-configs">Allows to select known broken CONFIG options.</flag>
+		<flag name="clang-default">Patch the makefile to use clang by default, rather than GCC.</flag>
+		<flag name="vanilla">Do not use not-yet-mainline patches coming from the LLVMlinux project.</flag>
+	</use>
+</pkgmetadata>
