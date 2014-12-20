@@ -1,0 +1,248 @@
+diff -Nuar linux-3.18.1-llvm.orig/arch/arm64/include/asm/arch_timer.h linux-3.18.1-llvm/arch/arm64/include/asm/arch_timer.h
+--- linux-3.18.1-llvm.orig/arch/arm64/include/asm/arch_timer.h	2014-12-20 23:47:24.365643703 +0100
++++ linux-3.18.1-llvm/arch/arm64/include/asm/arch_timer.h	2014-12-21 00:07:24.922725210 +0100
+@@ -37,19 +37,19 @@
+ 	if (access == ARCH_TIMER_PHYS_ACCESS) {
+ 		switch (reg) {
+ 		case ARCH_TIMER_REG_CTRL:
+-			asm volatile("msr cntp_ctl_el0,  %0" : : "r" (val));
++			asm volatile("msr cntp_ctl_el0, %0" : : "r" ((u64)val));
+ 			break;
+ 		case ARCH_TIMER_REG_TVAL:
+-			asm volatile("msr cntp_tval_el0, %0" : : "r" (val));
++			asm volatile("msr cntp_tval_el0, %0" : : "r" ((u64)val));
+ 			break;
+ 		}
+ 	} else if (access == ARCH_TIMER_VIRT_ACCESS) {
+ 		switch (reg) {
+ 		case ARCH_TIMER_REG_CTRL:
+-			asm volatile("msr cntv_ctl_el0,  %0" : : "r" (val));
++			asm volatile("msr cntv_ctl_el0, %0" : : "r" ((u64)val));
+ 			break;
+ 		case ARCH_TIMER_REG_TVAL:
+-			asm volatile("msr cntv_tval_el0, %0" : : "r" (val));
++			asm volatile("msr cntv_tval_el0, %0" : : "r" ((u64)val));
+ 			break;
+ 		}
+ 	}
+@@ -60,7 +60,7 @@
+ static __always_inline
+ u32 arch_timer_reg_read_cp15(int access, enum arch_timer_reg reg)
+ {
+-	u32 val;
++	u64 val;
+ 
+ 	if (access == ARCH_TIMER_PHYS_ACCESS) {
+ 		switch (reg) {
+@@ -84,26 +84,26 @@
+ 		BUG();
+ 	}
+ 
+-	return val;
++	return (u32)val;
+ }
+ 
+ static inline u32 arch_timer_get_cntfrq(void)
+ {
+-	u32 val;
++	u64 val;
+ 	asm volatile("mrs %0,   cntfrq_el0" : "=r" (val));
+-	return val;
++	return (u32)val;
+ }
+ 
+ static inline u32 arch_timer_get_cntkctl(void)
+ {
+-	u32 cntkctl;
++	u64 cntkctl;
+ 	asm volatile("mrs	%0, cntkctl_el1" : "=r" (cntkctl));
+-	return cntkctl;
++	return (u32)cntkctl;
+ }
+ 
+ static inline void arch_timer_set_cntkctl(u32 cntkctl)
+ {
+-	asm volatile("msr	cntkctl_el1, %0" : : "r" (cntkctl));
++	asm volatile("msr	cntkctl_el1, %0" : : "r" ((u64)cntkctl));
+ }
+ 
+ static inline u64 arch_counter_get_cntvct(void)
+diff -Nuar linux-3.18.1-llvm.orig/arch/arm64/include/asm/uaccess.h linux-3.18.1-llvm/arch/arm64/include/asm/uaccess.h
+--- linux-3.18.1-llvm.orig/arch/arm64/include/asm/uaccess.h	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/arch/arm64/include/asm/uaccess.h	2014-12-21 00:07:25.019725217 +0100
+@@ -93,7 +93,7 @@
+ 	__chk_user_ptr(addr);						\
+ 	asm("adds %1, %1, %3; ccmp %1, %4, #2, cc; cset %0, ls"		\
+ 		: "=&r" (flag), "=&r" (roksum)				\
+-		: "1" (addr), "Ir" (size),				\
++		: "1" (addr), "r" ((u64)size),				\
+ 		  "r" (current_thread_info()->addr_limit)		\
+ 		: "cc");						\
+ 	flag;								\
+diff -Nuar linux-3.18.1-llvm.orig/arch/arm64/kernel/debug-monitors.c linux-3.18.1-llvm/arch/arm64/kernel/debug-monitors.c
+--- linux-3.18.1-llvm.orig/arch/arm64/kernel/debug-monitors.c	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/arch/arm64/kernel/debug-monitors.c	2014-12-21 00:07:25.020725217 +0100
+@@ -43,15 +43,15 @@
+ {
+ 	unsigned long flags;
+ 	local_dbg_save(flags);
+-	asm volatile("msr mdscr_el1, %0" :: "r" (mdscr));
++	asm volatile("msr mdscr_el1, %0" : : "r" ((u64)mdscr));
+ 	local_dbg_restore(flags);
+ }
+ 
+ static u32 mdscr_read(void)
+ {
+-	u32 mdscr;
++	u64 mdscr;
+ 	asm volatile("mrs %0, mdscr_el1" : "=r" (mdscr));
+-	return mdscr;
++	return (u32)mdscr;
+ }
+ 
+ /*
+@@ -127,7 +127,7 @@
+  */
+ static void clear_os_lock(void *unused)
+ {
+-	asm volatile("msr oslar_el1, %0" : : "r" (0));
++	asm volatile("msr oslar_el1, %0" : : "r" ((u64)0));
+ }
+ 
+ static int os_lock_notify(struct notifier_block *self,
+diff -Nuar linux-3.18.1-llvm.orig/arch/arm64/kernel/perf_event.c linux-3.18.1-llvm/arch/arm64/kernel/perf_event.c
+--- linux-3.18.1-llvm.orig/arch/arm64/kernel/perf_event.c	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/arch/arm64/kernel/perf_event.c	2014-12-21 00:07:25.021725217 +0100
+@@ -844,16 +844,16 @@
+ 
+ static inline u32 armv8pmu_pmcr_read(void)
+ {
+-	u32 val;
++	u64 val;
+ 	asm volatile("mrs %0, pmcr_el0" : "=r" (val));
+-	return val;
++	return (u32)val;
+ }
+ 
+ static inline void armv8pmu_pmcr_write(u32 val)
+ {
+ 	val &= ARMV8_PMCR_MASK;
+ 	isb();
+-	asm volatile("msr pmcr_el0, %0" :: "r" (val));
++	asm volatile("msr pmcr_el0, %0" : : "r" ((u64)val));
+ }
+ 
+ static inline int armv8pmu_has_overflowed(u32 pmovsr)
+@@ -893,7 +893,7 @@
+ 	}
+ 
+ 	counter = ARMV8_IDX_TO_COUNTER(idx);
+-	asm volatile("msr pmselr_el0, %0" :: "r" (counter));
++	asm volatile("msr pmselr_el0, %0" : : "r" ((u64)counter));
+ 	isb();
+ 
+ 	return idx;
+@@ -901,7 +901,7 @@
+ 
+ static inline u32 armv8pmu_read_counter(int idx)
+ {
+-	u32 value = 0;
++	u64 value = 0;
+ 
+ 	if (!armv8pmu_counter_valid(idx))
+ 		pr_err("CPU%u reading wrong counter %d\n",
+@@ -911,7 +911,7 @@
+ 	else if (armv8pmu_select_counter(idx) == idx)
+ 		asm volatile("mrs %0, pmxevcntr_el0" : "=r" (value));
+ 
+-	return value;
++	return (u32)value;
+ }
+ 
+ static inline void armv8pmu_write_counter(int idx, u32 value)
+@@ -920,16 +920,16 @@
+ 		pr_err("CPU%u writing wrong counter %d\n",
+ 			smp_processor_id(), idx);
+ 	else if (idx == ARMV8_IDX_CYCLE_COUNTER)
+-		asm volatile("msr pmccntr_el0, %0" :: "r" (value));
++		asm volatile("msr pmccntr_el0, %0" : : "r" ((u64)value));
+ 	else if (armv8pmu_select_counter(idx) == idx)
+-		asm volatile("msr pmxevcntr_el0, %0" :: "r" (value));
++		asm volatile("msr pmxevcntr_el0, %0" : : "r" ((u64)value));
+ }
+ 
+ static inline void armv8pmu_write_evtype(int idx, u32 val)
+ {
+ 	if (armv8pmu_select_counter(idx) == idx) {
+ 		val &= ARMV8_EVTYPE_MASK;
+-		asm volatile("msr pmxevtyper_el0, %0" :: "r" (val));
++		asm volatile("msr pmxevtyper_el0, %0" : : "r" ((u64)val));
+ 	}
+ }
+ 
+@@ -944,7 +944,7 @@
+ 	}
+ 
+ 	counter = ARMV8_IDX_TO_COUNTER(idx);
+-	asm volatile("msr pmcntenset_el0, %0" :: "r" (BIT(counter)));
++	asm volatile("msr pmcntenset_el0, %0" : : "r" ((u64)BIT(counter)));
+ 	return idx;
+ }
+ 
+@@ -959,7 +959,7 @@
+ 	}
+ 
+ 	counter = ARMV8_IDX_TO_COUNTER(idx);
+-	asm volatile("msr pmcntenclr_el0, %0" :: "r" (BIT(counter)));
++	asm volatile("msr pmcntenclr_el0, %0" : : "r" ((u64)BIT(counter)));
+ 	return idx;
+ }
+ 
+@@ -974,7 +974,7 @@
+ 	}
+ 
+ 	counter = ARMV8_IDX_TO_COUNTER(idx);
+-	asm volatile("msr pmintenset_el1, %0" :: "r" (BIT(counter)));
++	asm volatile("msr pmintenset_el1, %0" : : "r" ((u64)BIT(counter)));
+ 	return idx;
+ }
+ 
+@@ -989,17 +989,17 @@
+ 	}
+ 
+ 	counter = ARMV8_IDX_TO_COUNTER(idx);
+-	asm volatile("msr pmintenclr_el1, %0" :: "r" (BIT(counter)));
++	asm volatile("msr pmintenclr_el1, %0" : : "r" ((u64)BIT(counter)));
+ 	isb();
+ 	/* Clear the overflow flag in case an interrupt is pending. */
+-	asm volatile("msr pmovsclr_el0, %0" :: "r" (BIT(counter)));
++	asm volatile("msr pmovsclr_el0, %0" : : "r" ((u64)BIT(counter)));
+ 	isb();
+ 	return idx;
+ }
+ 
+ static inline u32 armv8pmu_getreset_flags(void)
+ {
+-	u32 value;
++	u64 value;
+ 
+ 	/* Read */
+ 	asm volatile("mrs %0, pmovsclr_el0" : "=r" (value));
+@@ -1008,7 +1008,7 @@
+ 	value &= ARMV8_OVSR_MASK;
+ 	asm volatile("msr pmovsclr_el0, %0" :: "r" (value));
+ 
+-	return value;
++	return (u32)value;
+ }
+ 
+ static void armv8pmu_enable_event(struct hw_perf_event *hwc, int idx)
+@@ -1217,7 +1217,7 @@
+ 	armv8pmu_pmcr_write(ARMV8_PMCR_P | ARMV8_PMCR_C);
+ 
+ 	/* Disable access from userspace. */
+-	asm volatile("msr pmuserenr_el0, %0" :: "r" (0));
++	asm volatile("msr pmuserenr_el0, %0" : : "r" ((u64)0));
+ }
+ 
+ static int armv8_pmuv3_map_event(struct perf_event *event)

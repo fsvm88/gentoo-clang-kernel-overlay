@@ -23,8 +23,21 @@ SRC_URI="${KERNEL_URI} ${GENPATCHES_URI} ${ARCH_URI} ${LLVMLINUX_PATCHES_URI}"
 
 UNIPATCH_LIST="
 	${DISTDIR}/${LLVMLINUX_PATCHES_NAME}
-	${FILESDIR}/3.18.1-disable-clang-integrated-as.patch"
+	${FILESDIR}/3.18.1-disable-clang-integrated-as.patch
+	${FILESDIR}/3.18.1-inline-asm-aarch64.patch"
 UNIPATCH_STRICTORDER="yes"
+
+# As of 2014/12/20, the patches at LLVMLINUX_PATCHES_URI excluded below are in the following status:
+
+# -- APPLIED_UPSTREAM
+# Move-the-section-attribute-in-front-of-the-variable-.patch
+# ftrace.patch
+# initconst.patch
+
+# -- PORTED (see FILESDIR)
+# disable-clang-integrated-as.patch
+# inline-asm-aarch64.patch
+
 
 UNIPATCH_EXCLUDE="
 	Move-the-section-attribute-in-front-of-the-variable-.patch
