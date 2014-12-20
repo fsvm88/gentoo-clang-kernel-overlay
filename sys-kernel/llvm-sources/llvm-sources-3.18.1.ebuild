@@ -33,6 +33,17 @@ UNIPATCH_STRICTORDER="yes"
 # Move-the-section-attribute-in-front-of-the-variable-.patch
 # ftrace.patch
 # initconst.patch
+# named_register-percpu-aarch64.patch
+# named_register-return-address-aarch64.patch
+# named_register-stacktrace-aarch64.patch
+# named_register-thread_info-aarch64.patch
+# named_register-traps-aarch64.patch
+# ti-divider.patch
+# vlais-btrfs.patch
+# vlais-dm-crypt.patch
+# vlais-hmac.patch
+# vlais-libcrc32.patch
+# vlais-testmgr.patch
 
 # -- PORTED (see FILESDIR)
 # disable-clang-integrated-as.patch
