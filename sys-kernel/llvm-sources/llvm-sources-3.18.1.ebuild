@@ -21,7 +21,9 @@ IUSE="deblob experimental"
 DESCRIPTION="Full sources including the Gentoo and Clang patchset for the ${KV_MAJOR}.${KV_MINOR} kernel tree"
 SRC_URI="${KERNEL_URI} ${GENPATCHES_URI} ${ARCH_URI} ${LLVMLINUX_PATCHES_URI}"
 
-UNIPATCH_LIST="${DISTDIR}/${LLVMLINUX_PATCHES_NAME}"
+UNIPATCH_LIST="
+	${DISTDIR}/${LLVMLINUX_PATCHES_NAME}
+	${FILESDIR}/3.18.1-disable-clang-integrated-as.patch"
 UNIPATCH_STRICTORDER="yes"
 
 UNIPATCH_EXCLUDE="
