@@ -7,7 +7,7 @@ This is where Gentoo Clang kernel development is done.
 
 To add this overlay to a Gentoo system, run the following command:
 
-layman -o https://raw.github.com/fsvm88/gentoo-clang-kernel-overlay/master/overlay.xml -f -a zfs
+layman -o https://raw.github.com/fsvm88/gentoo-clang-kernel-overlay/master/overlay.xml -f -a gentoo-clang-kernel-overlay
 
 Note that you must have both dev-vcs/git and app-portage/layman installed on
 your system for this to work.
