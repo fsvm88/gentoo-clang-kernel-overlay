@@ -2,7 +2,7 @@
 <!DOCTYPE repositories SYSTEM "repositories.dtd">
 <repositories xmlns="" version="1.0">
   <repo quality="experimental" status="unofficial">
-    <name>clang-kernel</name>
+    <name>gentoo-clang-kernel-overlay</name>
     <description>Overlay for Gentoo Clang Kernel Development</description>
     <homepage>https://github.com/fsvm88/gentoo-clang-kernel-overlay</homepage>
     <owner type="project">
