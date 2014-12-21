@@ -1,0 +1,12 @@
+diff -Nuar linux-3.18.1-llvm.orig/crypto/Kconfig linux-3.18.1-llvm/crypto/Kconfig
+--- linux-3.18.1-llvm.orig/crypto/Kconfig	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/crypto/Kconfig	2014-12-21 20:50:22.571788388 +0100
+@@ -747,7 +747,7 @@
+ 
+ config CRYPTO_AES_NI_INTEL
+ 	tristate "AES cipher algorithms (AES-NI)"
+-	depends on X86
++	depends on X86 && BROKEN_WITH_CLANG
+ 	select CRYPTO_AES_X86_64 if 64BIT
+ 	select CRYPTO_AES_586 if !64BIT
+ 	select CRYPTO_CRYPTD

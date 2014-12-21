@@ -1,0 +1,36 @@
+diff -Nuar linux-3.18.1-llvm.orig/arch/arm/Kconfig linux-3.18.1-llvm/arch/arm/Kconfig
+--- linux-3.18.1-llvm.orig/arch/arm/Kconfig	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/arch/arm/Kconfig	2014-12-21 21:01:11.304832431 +0100
+@@ -1780,7 +1780,7 @@
+ 
+ config XEN
+ 	bool "Xen guest support on ARM"
+-	depends on ARM && AEABI && OF
++	depends on ARM && AEABI && OF && BROKEN_WITH_CLANG
+ 	depends on CPU_V7 && !CPU_V6
+ 	depends on !GENERIC_ATOMIC64
+ 	depends on MMU
+diff -Nuar linux-3.18.1-llvm.orig/arch/arm64/Kconfig linux-3.18.1-llvm/arch/arm64/Kconfig
+--- linux-3.18.1-llvm.orig/arch/arm64/Kconfig	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/arch/arm64/Kconfig	2014-12-21 21:00:46.858830772 +0100
+@@ -351,7 +351,7 @@
+ 
+ config XEN
+ 	bool "Xen guest support on ARM64"
+-	depends on ARM64 && OF
++	depends on ARM64 && OF && BROKEN_WITH_CLANG
+ 	select SWIOTLB_XEN
+ 	help
+ 	  Say Y if you want to run Linux in a Virtual Machine on Xen on ARM64.
+diff -Nuar linux-3.18.1-llvm.orig/arch/x86/xen/Kconfig linux-3.18.1-llvm/arch/x86/xen/Kconfig
+--- linux-3.18.1-llvm.orig/arch/x86/xen/Kconfig	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/arch/x86/xen/Kconfig	2014-12-21 21:00:23.822829208 +0100
+@@ -4,7 +4,7 @@
+ 
+ config XEN
+ 	bool "Xen guest support"
+-	depends on PARAVIRT
++	depends on PARAVIRT && BROKEN_WITH_CLANG
+ 	select PARAVIRT_CLOCK
+ 	select XEN_HAVE_PVMMU
+ 	depends on X86_64 || (X86_32 && X86_PAE)

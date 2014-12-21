@@ -1,0 +1,12 @@
+diff -Nuar linux-3.18.1-llvm.orig/lib/Kconfig.debug linux-3.18.1-llvm/lib/Kconfig.debug
+--- linux-3.18.1-llvm.orig/lib/Kconfig.debug	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/lib/Kconfig.debug	2014-12-21 21:58:36.004066297 +0100
+@@ -1622,7 +1622,7 @@
+ 
+ config BUILD_DOCSRC
+ 	bool "Build targets in Documentation/ tree"
+-	depends on HEADERS_CHECK
++	depends on HEADERS_CHECK && BROKEN_WITH_CLANG
+ 	help
+ 	  This option attempts to build objects from the source files in the
+ 	  kernel Documentation/ tree.

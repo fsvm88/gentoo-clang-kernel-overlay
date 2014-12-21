@@ -25,7 +25,11 @@ UNIPATCH_LIST="
 	${DISTDIR}/${LLVMLINUX_PATCHES_NAME}
 	${FILESDIR}/3.18.1-disable-clang-integrated-as.patch
 	${FILESDIR}/3.18.1-inline-asm-aarch64.patch
-	${FILESDIR}/3.18.1-add-CONFIG_BROKEN_WITH_CLANG.patch"
+	${FILESDIR}/3.18.1-add-CONFIG_BROKEN_WITH_CLANG.patch
+	${FILESDIR}/3.18.1-CRYPTO_AES_NI_INTEL-depends-on-BROKEN_WITH_CLANG.patch
+	${FILESDIR}/3.18.1-XEN-depends-on-BROKEN_WITH_CLANG.patch
+	${FILESDIR}/3.18.1-RANDOMIZE_BASE-depends-on-BROKEN_WITH_CLANG.patch
+	${FILESDIR}/3.18.1-BUILD_DOCSRC-depends-on-BROKEN_WITH_CLANG.patch"
 UNIPATCH_STRICTORDER="yes"
 
 # As of 2014/12/20, the patches at LLVMLINUX_PATCHES_URI excluded below are in the following status:
@@ -50,6 +54,13 @@ UNIPATCH_STRICTORDER="yes"
 # disable-clang-integrated-as.patch
 # inline-asm-aarch64.patch
 
+# The first two patches from the FILESDIR are the ports of the above,
+# the other patches introduce CONFIG_BROKEN_WITH_CLANG and make the following
+# depend on that option:
+# CONFIG_RANDOMIZE_BASE
+# CONFIG_AES_NI_INTEL_X86_64
+# CONFIG_BUILD_DOCSRC
+# CONFIG_XEN
 
 UNIPATCH_EXCLUDE="
 	Move-the-section-attribute-in-front-of-the-variable-.patch
@@ -72,8 +83,23 @@ UNIPATCH_EXCLUDE="
 
 pkg_postinst() {
 	kernel-2_pkg_postinst
-	einfo "For more info on this patchset, and how to report problems, see:"
-	einfo "${HOMEPAGE}"
+
+	ewarn "Please be aware that this ebuild is highly experimental."
+	ewarn ""
+	ewarn "It is based off sys-kernel/gentoo-sources but incorporates"
+	ewarn "LLVMLinux patches to make the kernel compile with clang."
+	ewarn ""
+	ewarn "Further, it ports some non-applying patches from upstream,"
+	ewarn "and adds a patchset to introduce CONFIG_BROKEN_WITH_CLANG"
+	ewarn "which disables compilation for clang-known-broken features."
+	ewarn ""
+	ewarn "If you are going to use \"make allyesconfig\" or using"
+	ewarn "some custom configuration, be sure to load it at least once"
+	ewarn "so that the following options may be disabled:"
+	ewarn "- CONFIG_AES_NI_INTEL_X86_64"
+	ewarn "- CONFIG_RANDOMIZE_BASE"
+	ewarn "- CONFIG_BUILD_DOCSRC"
+	ewarn "- CONFIG_XEN"
 }
 
 pkg_postrm() {
