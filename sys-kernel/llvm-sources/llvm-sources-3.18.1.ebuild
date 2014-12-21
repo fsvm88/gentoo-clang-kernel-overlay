@@ -24,7 +24,8 @@ SRC_URI="${KERNEL_URI} ${GENPATCHES_URI} ${ARCH_URI} ${LLVMLINUX_PATCHES_URI}"
 UNIPATCH_LIST="
 	${DISTDIR}/${LLVMLINUX_PATCHES_NAME}
 	${FILESDIR}/3.18.1-disable-clang-integrated-as.patch
-	${FILESDIR}/3.18.1-inline-asm-aarch64.patch"
+	${FILESDIR}/3.18.1-inline-asm-aarch64.patch
+	${FILESDIR}/3.18.1-add-CONFIG_BROKEN_WITH_CLANG.patch"
 UNIPATCH_STRICTORDER="yes"
 
 # As of 2014/12/20, the patches at LLVMLINUX_PATCHES_URI excluded below are in the following status:

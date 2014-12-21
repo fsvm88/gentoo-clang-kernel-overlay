@@ -1,0 +1,27 @@
+diff -Nuar linux-3.18.1-llvm.orig/arch/Kconfig linux-3.18.1-llvm/arch/Kconfig
+--- linux-3.18.1-llvm.orig/arch/Kconfig	2014-12-07 23:21:05.000000000 +0100
++++ linux-3.18.1-llvm/arch/Kconfig	2014-12-21 19:50:32.627544662 +0100
+@@ -2,6 +2,23 @@
+ # General architecture dependent options
+ #
+ 
++config BROKEN_WITH_CLANG
++	bool "Enable features broken with Clang"
++	default n
++	help
++	  Enable features which are known to be broken when compiling with clang.
++	  As of 2014/12/20 these include:
++	  - aes_ctrby8_avx-x86_64.S
++	  - xen/mmu.c (VLAIS DECLARE_BITMAP)
++	  - kaslr (mul -> mul[l|q]) (CONFIG_RANDOMIZE_BASE)
++	  - Documentation/vDSO/vdso_standalone_test_x86
++	  - crypto AES/NI
++	  
++	  List taken from LLVMLinux mailing list.
++	  
++	  Defaults to N, since the purpose of this ebuild is to make the linux kernel
++	  build with clang.
++
+ config OPROFILE
+ 	tristate "OProfile system profiling"
+ 	depends on PROFILING
