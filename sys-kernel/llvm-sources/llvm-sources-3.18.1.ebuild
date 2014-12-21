@@ -58,7 +58,7 @@ UNIPATCH_STRICTORDER="yes"
 # the other patches introduce CONFIG_BROKEN_WITH_CLANG and make the following
 # depend on that option:
 # CONFIG_RANDOMIZE_BASE
-# CONFIG_AES_NI_INTEL_X86_64
+# CONFIG_AES_NI_INTEL
 # CONFIG_BUILD_DOCSRC
 # CONFIG_XEN
 
@@ -96,7 +96,7 @@ pkg_postinst() {
 	ewarn "If you are going to use \"make allyesconfig\" or using"
 	ewarn "some custom configuration, be sure to load it at least once"
 	ewarn "so that the following options may be disabled:"
-	ewarn "- CONFIG_AES_NI_INTEL_X86_64"
+	ewarn "- CONFIG_AES_NI_INTEL"
 	ewarn "- CONFIG_RANDOMIZE_BASE"
 	ewarn "- CONFIG_BUILD_DOCSRC"
 	ewarn "- CONFIG_XEN"
